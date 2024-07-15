@@ -1,13 +1,19 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, NotFoundException, Param, Patch, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Inject, NotFoundException, Param, Patch, Post, Query, Res } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
+import { REQUEST } from '@nestjs/core';
 
 @Controller('coffees')
 export class CoffeesController {
 
-    constructor(private readonly coffeeService: CoffeesService) {}
+    constructor(
+        private readonly coffeeService: CoffeesService,
+        @Inject(REQUEST) private readonly request: Request,
+    ) {
+        console.log('Controller constructed');
+    }
 
     @Get()
     // Example using underlying (Express) response object

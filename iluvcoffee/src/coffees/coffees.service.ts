@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -7,16 +7,21 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavour } from './entities/flavour.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
+import { COFFEE_BRANDS } from './coffees.constants';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class CoffeesService {
     constructor(
         @InjectRepository(Coffee)
         private readonly coffeeRepository: Repository<Coffee>,
         @InjectRepository(Flavour)
         private readonly flavourRepository: Repository<Flavour>,
-        private readonly dataSource: DataSource
-    ) {}
+        private readonly dataSource: DataSource,
+        @Inject(COFFEE_BRANDS) coffeeBrands: string[]
+    ) {
+        console.log('Coffee service constructor: ' + coffeeBrands);
+    }
+    
 
     findAll(paginationQuery: PaginationQueryDto) {
         return this.coffeeRepository.find({
@@ -44,6 +49,7 @@ export class CoffeesService {
     }
 
     async create(createCoffeeDto: CreateCoffeeDto) {
+        console.log(createCoffeeDto instanceof CreateCoffeeDto)
         const flavours = await Promise.all(
             createCoffeeDto.flavours.map(name => this.preloadFlavourByName(name)),
         );

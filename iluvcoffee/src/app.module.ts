@@ -4,18 +4,26 @@ import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
+import { DatabaseModule } from './database/database.module';
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
-  imports: [CoffeesModule, TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'pass123',
-    database: 'postgres',
-    autoLoadEntities: true,
-    synchronize: false,
-  }), CoffeeRatingModule],
+  imports: [
+    ConfigModule.forRoot(),
+    CoffeesModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'pass123',
+      database: 'postgres',
+      autoLoadEntities: true,
+      synchronize: false,
+    }),
+    CoffeeRatingModule,
+    DatabaseModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
