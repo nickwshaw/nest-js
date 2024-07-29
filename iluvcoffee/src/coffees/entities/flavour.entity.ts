@@ -3,16 +3,16 @@ import { Coffee } from "./coffee.entity";
 
 @Entity()
 export class Flavour {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @ManyToMany(
-        type => Coffee,
-        coffee => coffee.flavours
-    )
-    coffees: Coffee[];
+  @ManyToMany(
+    type => Coffee,
+    coffee => coffee.flavours
+  )
+  coffees: Coffee[];
 }
  
